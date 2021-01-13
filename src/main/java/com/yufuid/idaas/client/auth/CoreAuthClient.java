@@ -5,13 +5,12 @@ import com.yufuid.idaas.domain.Token;
 import com.yufuid.idaas.domain.UserInfo;
 import com.yufuid.idaas.domain.WellKnown;
 
-import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.bind.DatatypeConverter;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.Set;
 
 /**
@@ -96,7 +95,8 @@ public class CoreAuthClient extends AuthClient {
     }
 
     private Token getToken(final String code) {
-        String basicString = Base64.getEncoder().encodeToString(
+
+        String basicString = DatatypeConverter.printBase64Binary(
             (clientId + ":" + clientSecret).getBytes(StandardCharsets.UTF_8)
         );
 

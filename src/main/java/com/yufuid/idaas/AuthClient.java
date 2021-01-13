@@ -1,14 +1,12 @@
 package com.yufuid.idaas;
 
 import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.SignedJWT;
 import com.yufuid.idaas.domain.JWKResult;
 import com.yufuid.idaas.domain.Token;
 import com.yufuid.idaas.domain.UserInfo;
 import com.yufuid.idaas.domain.WellKnown;
-import com.yufuid.idaas.exception.InvalidTokenTimeException;
 import com.yufuid.idaas.exception.KeyParseException;
 import com.yufuid.idaas.exception.SubNotMatchException;
 import com.yufuid.idaas.exception.TokenParseException;
@@ -23,7 +21,12 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import java.security.interfaces.RSAPublicKey;
 import java.text.ParseException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import static com.yufuid.idaas.util.TokenUtils.verify;
 
 /**
  * User: yunzhang
@@ -95,18 +98,7 @@ public abstract class AuthClient {
         try {
             String idToken = token.getIdToken();
             SignedJWT jwt = SignedJWT.parse(idToken);
-
-            boolean verifyResult = verify(jwt, rsaPublicKeys);
-            if (!verifyResult) {
-                throw new TokenParseException();
-            }
-            Date now = new Date();
-            if (jwt.getJWTClaimsSet().getIssueTime().after(now)) {
-                throw new InvalidTokenTimeException();
-            }
-            if (jwt.getJWTClaimsSet().getExpirationTime().before(now)) {
-                throw new InvalidTokenTimeException();
-            }
+            verify(jwt, rsaPublicKeys);
             return jwt.getJWTClaimsSet().getSubject();
         } catch (ParseException e) {
             throw new TokenParseException();
@@ -129,20 +121,6 @@ public abstract class AuthClient {
                     throw new KeyParseException();
                 }
             }
-        }
-    }
-
-    private boolean verify(SignedJWT jwt, Map<String, RSAPublicKey> publicKeys) throws TokenParseException {
-        try {
-            String kid = jwt.getHeader().getKeyID();
-            RSAPublicKey rsaPublicKey = publicKeys.get(kid);
-            if (rsaPublicKey == null) {
-                return false;
-            }
-            RSASSAVerifier verifier = new RSASSAVerifier(rsaPublicKey);
-            return jwt.verify(verifier);
-        } catch (JOSEException e) {
-            throw new TokenParseException();
         }
     }
 

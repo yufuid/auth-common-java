@@ -1,0 +1,10 @@
+{
+  "user_id": "us-xxx",
+  "sub": "zhangsan",
+  "name": "张三",
+  "preferred_username": "zhangsan",
+  "email": "zhangsan@tencent.com",
+  "email_verified": true,
+  "phoneNumber": "12312345678",
+  "phone_number_verified": true
+}

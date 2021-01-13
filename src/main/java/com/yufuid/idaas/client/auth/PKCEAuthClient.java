@@ -9,8 +9,8 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.bind.DatatypeConverter;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.Set;
 
 /**
@@ -94,9 +94,9 @@ public class PKCEAuthClient extends AuthClient {
     }
 
     private Token getToken(final String code) {
-        String basicString = Base64.getEncoder().encodeToString((
-            clientId + ":" + codeVerifier
-        ).getBytes(StandardCharsets.UTF_8));
+        String basicString = DatatypeConverter.printBase64Binary(
+            (clientId + ":" + codeVerifier).getBytes(StandardCharsets.UTF_8)
+        );
 
         Form form = new Form();
         form.param("grant_type", "authorization_code");

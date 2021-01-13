@@ -48,8 +48,7 @@
     "email",
     "email_verified",
     "phone_number",
-    "phone_number_verified",
-    "yufu.user.groups"
+    "phone_number_verified"
   ],
   "code_challenge_methods_supported": [
     "S256"

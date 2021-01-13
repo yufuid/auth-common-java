@@ -1,5 +1,7 @@
-import com.nimbusds.jwt.JWTClaimsSet;
+package com.yufuid.idaas;
+
 import com.yufuid.idaas.client.TokenClient;
+import com.yufuid.idaas.domain.JWT;
 import com.yufuid.idaas.domain.ServiceAccount;
 import org.junit.Test;
 
@@ -18,14 +20,14 @@ public class TokenClientTest {
         ServiceAccount serviceAccount = TestUtils.getDefaultServiceAccount();
         TokenClient tokenClient = new TokenClient(serviceAccount);
         String token = tokenClient.generateJWS(DEFAULT_AUDIENCE);
-        JWTClaimsSet claims = tokenClient.getClaims(token);
+        JWT jwt = tokenClient.verify(token);
 
         Date now = new Date(System.currentTimeMillis());
-        assert now.after(claims.getIssueTime());
+        assert now.after(jwt.getIssueAt());
 
-        assert now.before(claims.getExpirationTime());
+        assert now.before(jwt.getExpiration());
 
-        assert DEFAULT_AUDIENCE.equals(claims.getAudience().get(0));
+        assert DEFAULT_AUDIENCE.equals(jwt.getAudience());
 
     }
 

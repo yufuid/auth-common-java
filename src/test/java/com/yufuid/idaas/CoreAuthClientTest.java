@@ -1,4 +1,5 @@
-import com.yufuid.idaas.AuthClient;
+package com.yufuid.idaas;
+
 import com.yufuid.idaas.client.auth.CoreAuthClient;
 import com.yufuid.idaas.client.auth.CoreAuthClientBuilder;
 import com.yufuid.idaas.domain.ClientKeyPair;
@@ -57,7 +58,6 @@ public class CoreAuthClientTest {
 
         Mockito.when(response.getStatus()).thenReturn(200);
         Mockito.when(builder.get()).thenReturn(response);
-        Mockito.when(builder.post(Matchers.any())).thenReturn(response);
         Mockito.when(builder.get(WellKnown.class)).thenReturn(TestUtils.getDefaultWellKnown());
         Mockito.when(builder.get(JWKResult.class)).thenReturn(TestUtils.getDefaultJWKResult());
     }

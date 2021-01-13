@@ -1,7 +1,7 @@
+package com.yufuid.idaas;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yufuid.idaas.domain.JWKResult;
-import com.yufuid.idaas.domain.ServiceAccount;
-import com.yufuid.idaas.domain.WellKnown;
+import com.yufuid.idaas.domain.*;
 import com.yufuid.idaas.util.FileUtils;
 
 import java.io.IOException;
@@ -26,5 +26,15 @@ public class TestUtils {
     public static ServiceAccount getDefaultServiceAccount() throws IOException {
         String dataStr = FileUtils.getFileAsString("data/service-account.json");
         return objectMapper.readValue(dataStr, ServiceAccount.class);
+    }
+
+    public static Token getDefaultToken() throws IOException {
+        String dataStr = FileUtils.getFileAsString("data/token.json");
+        return objectMapper.readValue(dataStr, Token.class);
+    }
+
+    public static UserInfo getDefaultUserInfo() throws IOException {
+        String dataStr = FileUtils.getFileAsString("data/user-info.json");
+        return objectMapper.readValue(dataStr, UserInfo.class);
     }
 }

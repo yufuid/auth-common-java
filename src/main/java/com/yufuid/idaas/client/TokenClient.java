@@ -6,12 +6,16 @@ import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import com.yufuid.idaas.domain.JWT;
 import com.yufuid.idaas.domain.ServiceAccount;
 import com.yufuid.idaas.exception.KeyParseException;
+import com.yufuid.idaas.util.TokenUtils;
 
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Map;
+
+import static com.yufuid.idaas.domain.JWT.convert;
 
 /**
  * User: yunzhang
@@ -64,11 +68,12 @@ public class TokenClient {
         }
     }
 
-    public JWTClaimsSet getClaims(String token) throws KeyParseException {
+    public JWT verify(String token) throws KeyParseException {
         try {
             SignedJWT jwt = SignedJWT.parse(token);
-            return jwt.getJWTClaimsSet();
-        } catch (ParseException e) {
+            TokenUtils.verify(jwt, rsaKey.toRSAPublicKey());
+            return convert(jwt);
+        } catch (ParseException | JOSEException e) {
             throw new KeyParseException();
         }
     }
