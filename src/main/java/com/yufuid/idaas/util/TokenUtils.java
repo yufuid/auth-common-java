@@ -37,9 +37,6 @@ public class TokenUtils {
                 throw new TokenParseException();
             }
             Date now = new Date();
-            if (jwt.getJWTClaimsSet().getIssueTime().after(now)) {
-                throw new InvalidTokenTimeException();
-            }
             if (jwt.getJWTClaimsSet().getExpirationTime().before(now)) {
                 throw new InvalidTokenTimeException();
             }
